@@ -1,4 +1,4 @@
-import {isWon, isValidMove, plotBoard, isWonFromMoves} from './utils.js'
+import {isWon, isValidMove, plotBoard, whoWonFromMoves} from './utils.js'
 
 const field = [null, null, null, null, null, null, null, null, null]
 let currentPlayer = false
@@ -13,6 +13,6 @@ while(!isWon(...moves)) {
 }
 
 plotBoard(field)
-const wonBy = isWonFromMoves(...moves)
+const wonBy = whoWonFromMoves(...moves)
 console.log("Game won by", typeof wonBy === "boolean" ? wonBy ? "O" : "X" : "nobody")
 console.log("Gameplay took", moves.length, "moves")

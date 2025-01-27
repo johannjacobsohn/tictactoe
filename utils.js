@@ -29,7 +29,7 @@ export function plotBoard(fields) {
     console.log(state2Char(fields[6], 6), state2Char(fields[7], 7), state2Char(fields[8], 8))
 }
 
-export function isWonFromMoves(i, j = undefined, k = undefined, l, m = undefined, n = undefined, o = undefined, p = undefined, q = undefined) {
+export function whoWonFromMoves(i, j = undefined, k = undefined, l, m = undefined, n = undefined, o = undefined, p = undefined, q = undefined) {
     // we are exploiting the fact that object[undefined] = value does nothing
     const fields = {}
     fields[i] = false
@@ -46,7 +46,6 @@ export function isWonFromMoves(i, j = undefined, k = undefined, l, m = undefined
 }
 
 export function isWon(i, j = undefined, k = undefined, l, m = undefined, n = undefined, o = undefined, p = undefined, q = undefined) {
-    // console.log(i, j, k, l, m, n, o, p, q)
     // we are exploiting the fact that object[undefined] = value does nothing
     const fields = {}
     fields[i] = false
@@ -85,6 +84,12 @@ export function isValidMove(i, j = 100, k = 101, l = 102, m = 103, n = 104, o = 
            o !== p && o !== q &&
            p !== q
 
-    // console.log('isValidMove', i, j, k, l, m, n, o, p, q, noDups)
     return noDups
+}
+
+export function randomMove(field) {
+    const moves = field.filter(i => i !== null) 
+    const possibleMoves = Array(9).fill(null).map((_, i) => i).filter(i => !moves.includes(i))
+    const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
+    return move
 }
