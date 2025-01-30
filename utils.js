@@ -1,3 +1,4 @@
+import gametree from "./gametree.json"  with { type: "json" };
 
 export function whoWon(fields) {
     // check rows
@@ -92,4 +93,52 @@ export function randomMove(field) {
     const possibleMoves = Array(9).fill(null).map((_, i) => i).filter(i => !moves.includes(i))
     const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
     return move
+}
+
+
+/*
+    find the best move for the current player based on the game subtree
+ */
+export function minMaxMove(moves, currentPlayer) {
+    let subtree = gametree
+    moves.forEach(move => {
+        subtree = subtree[move]
+    })
+
+    // calc minmax for each subtree
+    // console.log(subtree, moves, moves.length)
+    if(typeof subtree === "boolean" || subtree === null){
+        console.log("minmax return", 0)
+        return 0
+    }
+    const recommendation = Object.entries(subtree)
+        .map(([key, value]) => ({ key, value: minMax(value, true, currentPlayer) }))
+        .sort((a, b) => a.value - b.value)
+        .map(({ key }) => key)
+        .slice(-1)[0] // get the last one, which is (one of) the best moves
+    return parseInt(recommendation)
+}
+
+export function minMax(tree, maximizingPlayer, currentPlayer) {
+    if(typeof tree === "boolean"){
+        return tree === currentPlayer ? 1 : -1
+    } else if(tree === null){
+        return 0
+    }
+
+    if (maximizingPlayer) {
+        let value = -Infinity
+        Object.values(tree).forEach((subtree) => {
+            value = Math.max(value, minMax(subtree, false, currentPlayer))
+        })
+
+        return value
+    } else {
+        let value = Infinity
+        Object.values(tree).forEach((subtree) => {
+            value = Math.min(value, minMax(subtree, true, currentPlayer))
+        })
+
+        return value
+    }
 }
